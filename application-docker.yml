@@ -24,3 +24,8 @@ infra:
 # and the browser talks to the gateway/auth-server from outside the compose network.
 parkspot:
   web-origin: http://localhost:4200
+
+management:
+  otlp:
+    tracing:
+      endpoint: http://tempo:4318/v1/traces

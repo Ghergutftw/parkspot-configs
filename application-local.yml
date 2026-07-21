@@ -22,3 +22,8 @@ infra:
 
 parkspot:
   web-origin: http://localhost:4200
+
+management:
+  otlp:
+    tracing:
+      endpoint: http://localhost:4318/v1/traces
