@@ -1,0 +1,29 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-server.parkspot.svc.cluster.local:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+# Values below are meant to be supplied via ConfigMap/Secret env vars in the k8s
+# manifests (k8s/overlays/eks). On EKS: infra.postgres.host = RDS endpoint,
+# infra.redis.host = ElastiCache endpoint, infra.kafka.bootstrap-servers = in-cluster
+# Strimzi bootstrap service. S3 access/secret keys are deliberately left unset so the
+# AWS SDK falls back to its default credential chain (IRSA), not static keys.
+infra:
+  postgres:
+    host: ${POSTGRES_HOST}
+    port: ${POSTGRES_PORT:5432}
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT:6379}
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS}
+  s3:
+    endpoint: ${S3_ENDPOINT:}
+    region: ${AWS_REGION:eu-central-1}
+    access-key: ${AWS_ACCESS_KEY_ID:}
+    secret-key: ${AWS_SECRET_ACCESS_KEY:}
+
+parkspot:
+  web-origin: ${WEB_ORIGIN}

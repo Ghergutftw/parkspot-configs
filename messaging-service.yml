@@ -1,0 +1,43 @@
+server:
+  port: 8083
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${infra.postgres.host}:${infra.postgres.port}/messaging_db
+    username: ${DB_USERNAME:parkspot}
+    password: ${DB_PASSWORD:parkspot}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  data:
+    redis:
+      host: ${infra.redis.host}
+      port: ${infra.redis.port}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${parkspot.issuer-uri:http://localhost:9000}
+      client:
+        registration:
+          messaging-service:
+            provider: parkspot-auth
+            client-id: messaging-service
+            client-secret: ${MESSAGING_SERVICE_CLIENT_SECRET:local-only-messaging-service-secret}
+            authorization-grant-type: client_credentials
+            scope: internal
+        provider:
+          parkspot-auth:
+            issuer-uri: ${parkspot.issuer-uri:http://localhost:9000}
+
+aws:
+  s3:
+    endpoint: ${infra.s3.endpoint:}
+    region: ${infra.s3.region:eu-central-1}
+    access-key: ${infra.s3.access-key:}
+    secret-key: ${infra.s3.secret-key:}
+    bucket: parkspot

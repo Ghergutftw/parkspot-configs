@@ -1,0 +1,40 @@
+server:
+  port: 8082
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${infra.postgres.host}:${infra.postgres.port}/reservation_db
+    username: ${DB_USERNAME:parkspot}
+    password: ${DB_PASSWORD:parkspot}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  data:
+    redis:
+      host: ${infra.redis.host}
+      port: ${infra.redis.port}
+  kafka:
+    bootstrap-servers: ${infra.kafka.bootstrap-servers}
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${parkspot.issuer-uri:http://localhost:9000}
+      client:
+        registration:
+          reservation-service:
+            provider: parkspot-auth
+            client-id: reservation-service
+            client-secret: ${RESERVATION_SERVICE_CLIENT_SECRET:local-only-reservation-service-secret}
+            authorization-grant-type: client_credentials
+            scope: internal
+        provider:
+          parkspot-auth:
+            issuer-uri: ${parkspot.issuer-uri:http://localhost:9000}
+
+parkspot:
+  parking-service-base-url: ${PARKING_SERVICE_BASE_URL:http://localhost:8081}

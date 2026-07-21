@@ -1,0 +1,32 @@
+server:
+  port: 9000
+
+spring:
+  datasource:
+    url: jdbc:postgresql://${infra.postgres.host}:${infra.postgres.port}/auth_db
+    username: ${DB_USERNAME:parkspot}
+    password: ${DB_PASSWORD:parkspot}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  kafka:
+    bootstrap-servers: ${infra.kafka.bootstrap-servers}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+parkspot:
+  issuer-uri: ${AUTH_ISSUER_URI:http://localhost:9000}
+  oauth2:
+    angular-client-id: angular-app
+    angular-redirect-uris: ${ANGULAR_REDIRECT_URIS:http://localhost:4200/callback,http://localhost:4200/silent-refresh.html}
+    angular-post-logout-redirect-uris: ${ANGULAR_LOGOUT_REDIRECT_URIS:http://localhost:4200/}
+    service-clients:
+      parking-service: ${PARKING_SERVICE_CLIENT_SECRET:local-only-parking-service-secret}
+      reservation-service: ${RESERVATION_SERVICE_CLIENT_SECRET:local-only-reservation-service-secret}
+      messaging-service: ${MESSAGING_SERVICE_CLIENT_SECRET:local-only-messaging-service-secret}
+      api-gateway: ${GATEWAY_CLIENT_SECRET:local-only-gateway-secret}

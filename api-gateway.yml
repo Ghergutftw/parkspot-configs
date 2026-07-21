@@ -1,0 +1,45 @@
+server:
+  port: 8080
+
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${parkspot.issuer-uri:http://localhost:9000}
+  cloud:
+    gateway:
+      mvc:
+        routes:
+          - id: auth-server
+            uri: lb://auth-server
+            predicates:
+              - Path=/api/auth/**
+            filters:
+              - StripPrefix=2
+          - id: parking-service
+            uri: lb://parking-service
+            predicates:
+              - Path=/api/parking/**
+            filters:
+              - StripPrefix=2
+          - id: reservation-service
+            uri: lb://reservation-service
+            predicates:
+              - Path=/api/reservations/**
+            filters:
+              - StripPrefix=2
+          - id: messaging-service
+            uri: lb://messaging-service
+            predicates:
+              - Path=/api/messaging/**
+            filters:
+              - StripPrefix=2
+
+parkspot:
+  issuer-uri: ${AUTH_ISSUER_URI:http://localhost:9000}
+  cors:
+    allowed-origins: ${parkspot.web-origin:http://localhost:4200}
+  oauth2:
+    client-id: api-gateway
+    client-secret: ${GATEWAY_CLIENT_SECRET:local-only-gateway-secret}

@@ -1,0 +1,26 @@
+eureka:
+  client:
+    service-url:
+      defaultZone: http://discovery-server:8761/eureka/
+  instance:
+    prefer-ip-address: true
+
+infra:
+  postgres:
+    host: postgres
+    port: 5432
+  redis:
+    host: redis
+    port: 6379
+  kafka:
+    bootstrap-servers: kafka:9092
+  s3:
+    endpoint: http://localstack:4566
+    region: eu-central-1
+    access-key: test
+    secret-key: test
+
+# browser-facing URLs stay on localhost: docker-compose publishes ports to the host,
+# and the browser talks to the gateway/auth-server from outside the compose network.
+parkspot:
+  web-origin: http://localhost:4200

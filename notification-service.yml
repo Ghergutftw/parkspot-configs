@@ -1,0 +1,21 @@
+server:
+  port: 8084
+
+spring:
+  kafka:
+    bootstrap-servers: ${infra.kafka.bootstrap-servers}
+    consumer:
+      group-id: notification-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.parkspot.*
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${parkspot.issuer-uri:http://localhost:9000}
+
+parkspot:
+  notifications:
+    sender: console
