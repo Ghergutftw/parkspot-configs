@@ -38,8 +38,7 @@ spring:
 
 aws:
   s3:
-    endpoint: ${infra.s3.endpoint:}
-    region: ${infra.s3.region:eu-central-1}
+    region: ${infra.s3.region}
     access-key: ${infra.s3.access-key:}
     secret-key: ${infra.s3.secret-key:}
-    bucket: parkspot
+    bucket: ${infra.s3.bucket}
