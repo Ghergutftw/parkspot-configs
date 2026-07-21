@@ -17,6 +17,11 @@ spring:
     redis:
       host: ${infra.redis.host}
       port: ${infra.redis.port}
+  kafka:
+    bootstrap-servers: ${infra.kafka.bootstrap-servers}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
   security:
     oauth2:
       resourceserver:

@@ -2,6 +2,17 @@ server:
   port: 8084
 
 spring:
+  datasource:
+    url: jdbc:postgresql://${infra.postgres.host}:${infra.postgres.port}/notification_db
+    username: ${DB_USERNAME:parkspot}
+    password: ${DB_PASSWORD:parkspot}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
   kafka:
     bootstrap-servers: ${infra.kafka.bootstrap-servers}
     consumer:
@@ -10,12 +21,32 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: com.parkspot.*
+  # No real SMTP credentials yet (see CLAUDE.md) — sends fail soft and are recorded as FAILED in
+  # notification_log until SMTP_HOST/SMTP_USERNAME/SMTP_PASSWORD are set to a real provider.
+  mail:
+    host: ${SMTP_HOST:smtp.invalid.local}
+    port: ${SMTP_PORT:587}
+    username: ${SMTP_USERNAME:}
+    password: ${SMTP_PASSWORD:}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: ${parkspot.issuer-uri:http://localhost:9000}
-
-parkspot:
-  notifications:
-    sender: console
+      client:
+        registration:
+          notification-service:
+            provider: parkspot-auth
+            client-id: notification-service
+            client-secret: ${NOTIFICATION_SERVICE_CLIENT_SECRET:local-only-notification-service-secret}
+            authorization-grant-type: client_credentials
+            scope: internal
+        provider:
+          parkspot-auth:
+            issuer-uri: ${parkspot.issuer-uri:http://localhost:9000}

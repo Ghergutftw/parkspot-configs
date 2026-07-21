@@ -11,30 +11,35 @@ spring:
     gateway:
       mvc:
         routes:
+          # auth-server's own controllers are already mapped under /api/auth/**, so no prefix is stripped.
           - id: auth-server
             uri: lb://auth-server
             predicates:
               - Path=/api/auth/**
-            filters:
-              - StripPrefix=2
           - id: parking-service
             uri: lb://parking-service
             predicates:
               - Path=/api/parking/**
             filters:
-              - StripPrefix=2
+              - StripPrefix=1
           - id: reservation-service
             uri: lb://reservation-service
             predicates:
               - Path=/api/reservations/**
             filters:
-              - StripPrefix=2
+              - StripPrefix=1
           - id: messaging-service
             uri: lb://messaging-service
             predicates:
-              - Path=/api/messaging/**
+              - Path=/api/conversations/**
             filters:
-              - StripPrefix=2
+              - StripPrefix=1
+          - id: notification-service
+            uri: lb://notification-service
+            predicates:
+              - Path=/api/notifications/**
+            filters:
+              - StripPrefix=1
 
 parkspot:
   issuer-uri: ${AUTH_ISSUER_URI:http://localhost:9000}

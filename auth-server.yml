@@ -29,4 +29,5 @@ parkspot:
       parking-service: ${PARKING_SERVICE_CLIENT_SECRET:local-only-parking-service-secret}
       reservation-service: ${RESERVATION_SERVICE_CLIENT_SECRET:local-only-reservation-service-secret}
       messaging-service: ${MESSAGING_SERVICE_CLIENT_SECRET:local-only-messaging-service-secret}
+      notification-service: ${NOTIFICATION_SERVICE_CLIENT_SECRET:local-only-notification-service-secret}
       api-gateway: ${GATEWAY_CLIENT_SECRET:local-only-gateway-secret}
