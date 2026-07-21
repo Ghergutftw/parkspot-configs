@@ -17,8 +17,20 @@ spring:
     redis:
       host: ${infra.redis.host}
       port: ${infra.redis.port}
+  cache:
+    type: redis
   kafka:
     bootstrap-servers: ${infra.kafka.bootstrap-servers}
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: parking-service
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.parkspot.*
+        spring.json.use.type.headers: true
   security:
     oauth2:
       resourceserver:
