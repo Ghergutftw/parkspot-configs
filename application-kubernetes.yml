@@ -27,3 +27,4 @@ infra:
 
 parkspot:
   web-origin: ${WEB_ORIGIN}
+  internal-issuer-uri: ${AUTH_INTERNAL_ISSUER_URI:http://auth-server.parkspot.svc.cluster.local:9000}

@@ -22,6 +22,7 @@ infra:
 
 parkspot:
   web-origin: http://localhost:4200
+  internal-issuer-uri: http://localhost:9000
 
 management:
   otlp:

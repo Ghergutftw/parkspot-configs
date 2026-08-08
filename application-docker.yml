@@ -22,8 +22,12 @@ infra:
 
 # browser-facing URLs stay on localhost: docker-compose publishes ports to the host,
 # and the browser talks to the gateway/auth-server from outside the compose network.
+# internal-issuer-uri is for server-to-server calls (JWKS fetch, client-credentials token
+# fetch) which happen from inside the compose network, where "localhost" would resolve to
+# the calling container itself rather than auth-server.
 parkspot:
   web-origin: http://localhost:4200
+  internal-issuer-uri: http://auth-server:9000
 
 management:
   otlp:

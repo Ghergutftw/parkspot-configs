@@ -35,7 +35,10 @@ spring:
     oauth2:
       resourceserver:
         jwt:
+          # issuer-uri must match the "iss" claim embedded in tokens (browser-facing host);
+          # jwk-set-uri is fetched server-to-server, so it must use the internal network address.
           issuer-uri: ${parkspot.issuer-uri:http://localhost:9000}
+          jwk-set-uri: ${parkspot.internal-issuer-uri:http://localhost:9000}/oauth2/jwks
       client:
         registration:
           parking-service:
@@ -46,7 +49,10 @@ spring:
             scope: internal
         provider:
           parkspot-auth:
-            issuer-uri: ${parkspot.issuer-uri:http://localhost:9000}
+            # token-uri is called server-to-server, so use the internal network address directly
+            # (avoids OIDC discovery against issuer-uri, which is browser-facing and unreachable
+            # from inside another service's container).
+            token-uri: ${parkspot.internal-issuer-uri:http://localhost:9000}/oauth2/token
 
 aws:
   s3:

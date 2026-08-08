@@ -6,7 +6,10 @@ spring:
     oauth2:
       resourceserver:
         jwt:
+          # issuer-uri must match the "iss" claim embedded in tokens (browser-facing host);
+          # jwk-set-uri is fetched server-to-server, so it must use the internal network address.
           issuer-uri: ${parkspot.issuer-uri:http://localhost:9000}
+          jwk-set-uri: ${parkspot.internal-issuer-uri:http://localhost:9000}/oauth2/jwks
   cloud:
     gateway:
       mvc:
