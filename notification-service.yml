@@ -1,6 +1,14 @@
 server:
   port: 8084
 
+management:
+  health:
+    mail:
+      # SMTP is deliberately unconfigured/unreachable in this environment (see the mail block
+      # below) — sends soft-fail by design, so the actuator mail indicator's connection check
+      # is just noise on every health scrape, not a real signal.
+      enabled: false
+
 spring:
   datasource:
     url: jdbc:postgresql://${infra.postgres.host}:${infra.postgres.port}/notification_db
